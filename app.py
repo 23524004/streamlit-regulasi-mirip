@@ -1,20 +1,24 @@
 import streamlit as st
 import sys
 import os
-sys.path.append('./src')  # Add src folder to the path
-from src/query import GraphTraversal
+
+# Add the src folder to sys.path
+sys.path.append(os.path.join(os.getcwd(), 'src'))  # Make sure 'src' folder is in sys.path
+
+# Now import GraphTraversal from query.py in src/
+from query import GraphTraversal
 import networkx as nx
 
 # Path to the graph file
-GRAPH_FILE_PATH = 'dataset/simple_final_graph.graphml'
+GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
 
 def perform_search(query):
     # Load the graph
     graph = nx.read_graphml(GRAPH_FILE_PATH)
     
     # Define traversal parameters
-    similarity_threshold = 0.1
-    max_depth = 2
+    similarity_threshold = 0.5
+    max_depth = 3
     
     # Create a GraphTraversal object
     traversal = GraphTraversal(graph, query, similarity_threshold, max_depth)
