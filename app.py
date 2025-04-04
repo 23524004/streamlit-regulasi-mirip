@@ -22,29 +22,19 @@ def perform_search(query):
 st.markdown("""
     <style>
         .search-box {
-            padding: 10px;
-            font-size: 18px;
-            border-radius: 5px;
+            padding: 20px;
+            font-size: 24px;
+            border-radius: 10px;
             border: 2px solid #4CAF50;
             width: 100%;
             max-width: 600px;
-        }
-        .search-button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 18px;
-        }
-        .search-button:hover {
-            background-color: #45a049;
+            height: 60px;
         }
         .header {
             text-align: center;
             color: #eb6a6a;
             font-size: 36px;
+            margin-bottom: 30px;
         }
         .results {
             background-color: #f4f4f4;
@@ -58,23 +48,12 @@ st.markdown("""
 # Streamlit layout
 st.markdown('<div class="header">PENCARIAN REGULASI</div>', unsafe_allow_html=True)
 
-search_query = st.text_input("Enter your search query:", "", key="search", placeholder="Search for Python, Streamlit, etc.", help="Type your search query and hit Enter")
+search_query = st.text_input("", "", key="search", placeholder="Type your query and press Enter", help="Start typing to search...", max_chars=100)
 
-col1, col2 = st.columns([4, 1])
-
-with col1:
-    pass  # Just to keep the layout
-
-with col2:
-    search_button = st.button("Search", key="search_button", use_container_width=True)
-
-if search_button or search_query:
-    if search_query:
-        with st.spinner("Searching..."):
-            results = perform_search(search_query)
-            st.markdown(f'<div class="results">{results}</div>', unsafe_allow_html=True)
-    else:
-        st.warning("Please enter a search query.")
+if search_query:
+    with st.spinner("Searching..."):
+        results = perform_search(search_query)
+        st.markdown(f'<div class="results">{results}</div>', unsafe_allow_html=True)
 
 
 
