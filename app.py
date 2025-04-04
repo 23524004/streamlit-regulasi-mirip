@@ -37,7 +37,7 @@ def perform_search(query):
 
 def format_results_for_display(results):
     """Format the traversal results for displaying in Streamlit"""
-    formatted_results = ""
+    formatted_results = []
     for result in results:
         from_node = result.get('from_node', 'Unknown')
         to_node = result.get('to_node', 'Unknown')
@@ -45,7 +45,7 @@ def format_results_for_display(results):
         similarity_score = result.get('similarity_score', 'N/A')
         isi = result.get('isi', 'N/A')
 
-        formatted_results += f"""
+        formatted_result = f"""
         <div class="result">
             <div class="result-header">
                 <strong>From Node:</strong> {from_node} &rarr; <strong>To Node:</strong> {to_node}
@@ -59,7 +59,8 @@ def format_results_for_display(results):
             </div>
         </div>
         """
-    
+        formatted_results.append(formatted_result)
+
     return formatted_results
 
 # Streamlit layout
@@ -131,6 +132,7 @@ if search_query:
 
         # Display the results in Streamlit
         if formatted_results:
-            st.markdown(f'<div class="results">{formatted_results}</div>', unsafe_allow_html=True)
+            for result in formatted_results:
+                st.markdown(result, unsafe_allow_html=True)
         else:
             st.markdown('<div class="results">No results found.</div>', unsafe_allow_html=True)
