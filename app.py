@@ -28,7 +28,7 @@ st.markdown("""
             border: 2px solid #4CAF50;
             width: 100%;
             max-width: 600px;
-            height: 60px;
+            height: 120px;
         }
         .header {
             text-align: center;
@@ -48,7 +48,7 @@ st.markdown("""
 # Streamlit layout
 st.markdown('<div class="header">PENCARIAN REGULASI</div>', unsafe_allow_html=True)
 
-search_query = st.text_input("", "", key="search", placeholder="Type your query and press Enter", help="Start typing to search...", max_chars=100)
+search_query = st.text_input("", "", key="search", placeholder="Type your query and press Enter", help="Start typing to search...", max_chars=25)
 
 if search_query:
     with st.spinner("Searching..."):
