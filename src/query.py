@@ -235,39 +235,39 @@ class GraphTraversal:
         #             f.write(edge_info)
 
 # Example Usage
-def main():
-    # Load the graph (replace with your graphml file path)
-    print("Reading the initial graph...")
-    graph = nx.read_graphml("/content/drive/MyDrive/PROYEK PENERATAN TERAPAN/PPT K7/Dataset/kg_data_50_new_cont.graphml")
+# def main():
+#     # Load the graph (replace with your graphml file path)
+#     print("Reading the initial graph...")
+#     graph = nx.read_graphml("/content/drive/MyDrive/PROYEK PENERATAN TERAPAN/PPT K7/Dataset/kg_data_50_new_cont.graphml")
 
-    # User-defined parameters
-    query = str(input("Masukkan query Anda: "))
+#     # User-defined parameters
+#     query = str(input("Masukkan query Anda: "))
 
-    similarity_threshold = 0.5
-    max_depth = 3
+#     similarity_threshold = 0.5
+#     max_depth = 3
 
-    print("Doing graph traversal...")
-    traversal = GraphTraversal(graph, query, similarity_threshold, max_depth)
+#     print("Doing graph traversal...")
+#     traversal = GraphTraversal(graph, query, similarity_threshold, max_depth)
 
-    # Step 1: Get initial nodes
-    initial_nodes = traversal.get_initial_nodes()
+#     # Step 1: Get initial nodes
+#     initial_nodes = traversal.get_initial_nodes()
 
-    print("Initial Nodes:")
-    for node, sim in initial_nodes:
-        print(f"Node: {node}, Similarity: {sim:.2f}")
-    print("\n")
+#     print("Initial Nodes:")
+#     for node, sim in initial_nodes:
+#         print(f"Node: {node}, Similarity: {sim:.2f}")
+#     print("\n")
 
-    # Step 2: Traverse the graph
-    results = traversal.traverse(initial_nodes)
+#     # Step 2: Traverse the graph
+#     results = traversal.traverse(initial_nodes)
 
-    # Step 3: Display results
-    timezone = pytz.timezone('Asia/Jakarta')
-    current_time = datetime.now(timezone)
-    timestamp = current_time.strftime('%Y-%m-%d_%H-%M-%S')
-    # traversal.display_results(results)
-    traversal.display_results_grouped(results, f"Eksperimen1_result_50_{timestamp}.txt")
+#     # Step 3: Display results
+#     timezone = pytz.timezone('Asia/Jakarta')
+#     current_time = datetime.now(timezone)
+#     timestamp = current_time.strftime('%Y-%m-%d_%H-%M-%S')
+#     # traversal.display_results(results)
+#     traversal.display_results_grouped(results, f"Eksperimen1_result_50_{timestamp}.txt")
 
-    print("Done!")
+#     print("Done!")
 
-if __name__ == "__main__":
-    # main()
+# if __name__ == "__main__":
+#     main()
