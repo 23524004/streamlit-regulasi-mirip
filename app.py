@@ -7,9 +7,9 @@ from time import sleep
 def perform_search(query):
     sleep(1)
     if query.lower() == "python":
-        return "Results for 'python':\n- Python Docs\n- Python Tutorial\n- Python Courses"
+        return f"Results for '{query}':\n- Python 1\n- Python 2\n- Python 3"
     elif query.lower() == "streamlit":
-        return "Results for 'streamlit':\n- Streamlit Docs\n- Streamlit Tutorial"
+        return f"Results for '{query}':\n- Streamlit 1\n- Streamlit 2\n- Streamlit 3"
     else:
         return f"Results for '{query}':\n- No results found."
 
@@ -28,6 +28,7 @@ st.markdown("""
             border: 2px solid #4CAF50;
             width: 100%;
             max-width: 600px;
+            min-height:100px;
         }
         .header {
             text-align: center;
