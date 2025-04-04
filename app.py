@@ -43,7 +43,7 @@ st.markdown("""
         }
         .header {
             text-align: center;
-            color: #333;
+            color: #eb6a6a;
             font-size: 36px;
         }
         .results {
@@ -56,25 +56,20 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # Streamlit layout
-st.markdown('<div class="header">Search Application</div>', unsafe_allow_html=True)
+st.markdown('<div class="header">PENCARIAN REGULASI</div>', unsafe_allow_html=True)
 
-# Create a search box with custom CSS
 search_query = st.text_input("Enter your search query:", "", key="search", placeholder="Search for Python, Streamlit, etc.", help="Type your search query and hit Enter")
 
-# Use columns for side-by-side layout for button and input box
 col1, col2 = st.columns([4, 1])
 
 with col1:
     pass  # Just to keep the layout
 
 with col2:
-    # Button to trigger the search
     search_button = st.button("Search", key="search_button", use_container_width=True)
 
-# Trigger search if the button is clicked or the user presses Enter
 if search_button or search_query:
     if search_query:
-        # Show loading spinner
         with st.spinner("Searching..."):
             results = perform_search(search_query)
             st.markdown(f'<div class="results">{results}</div>', unsafe_allow_html=True)
