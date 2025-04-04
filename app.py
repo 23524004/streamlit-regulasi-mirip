@@ -19,20 +19,19 @@ def perform_search(query):
         st.error("Graph file could not be loaded or is empty.")
         return
 
-    
     # Define traversal parameters
     similarity_threshold = 0.1
     max_depth = 2
-    
+
     # Create a GraphTraversal object
     traversal = GraphTraversal(graph, query, similarity_threshold, max_depth)
-    
+
     # Step 1: Get initial nodes based on query similarity
     initial_nodes = traversal.get_initial_nodes()
-    
+
     # Step 2: Perform the graph traversal starting from the initial nodes
     results = traversal.traverse(initial_nodes)
-    
+
     # Return results
     return results
 
@@ -40,28 +39,63 @@ def format_results_for_display(results):
     """Format the traversal results for displaying in Streamlit"""
     formatted_results = ""
     for result in results:
-        formatted_results += f"From Node: {result['from_node']}\n"
-        formatted_results += f"To Node: {result['to_node']}\n"
-        formatted_results += f"Relation: {result['relation']}\n"
-        if result['similarity_score']:
-            formatted_results += f"Similarity Score: {result['similarity_score']:.2f}\n"
-        if result['isi']:
-            formatted_results += f"Content (Isi): {result['isi']}\n"
-        formatted_results += "-" * 40 + "\n"
+        from_node = result.get('from_node', 'Unknown')
+        to_node = result.get('to_node', 'Unknown')
+        relation = result.get('relation', 'N/A')
+        similarity_score = result.get('similarity_score', 'N/A')
+        isi = result.get('isi', 'N/A')
+
+        formatted_results += f"""
+        <div class="result">
+            <div class="result-header">
+                <strong>From Node:</strong> {from_node} &rarr; <strong>To Node:</strong> {to_node}
+            </div>
+            <div class="result-body">
+                <div class="relation"><strong>Relation:</strong> {relation}</div>
+                <div class="similarity-score"><strong>Similarity Score:</strong> {similarity_score if similarity_score != 'N/A' else 'N/A'}</div>
+            </div>
+            <div class="content">
+                <strong>Content (Isi):</strong> {isi}
+            </div>
+        </div>
+        """
     
     return formatted_results
 
 # Streamlit layout
 st.markdown("""
     <style>
-        .search-box {
-            padding: 10px;
+        .result {
+            background-color: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .result-header {
             font-size: 18px;
-            border-radius: 5px;
-            border: 2px solid #4CAF50;
-            width: 100%;
-            max-width: 600px;
-            min-height:100px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        .result-body {
+            font-size: 16px;
+            margin: 10px 0;
+            color: #555;
+        }
+        .similarity-score {
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        .relation {
+            font-style: italic;
+            color: #777;
+        }
+        .content {
+            font-size: 14px;
+            color: #333;
+            white-space: pre-wrap;
+            word-wrap: break-word;
         }
         .header {
             text-align: center;
@@ -69,15 +103,18 @@ st.markdown("""
             font-size: 36px;
             margin-bottom: 30px;
         }
-        .results {
-            background-color: #f4f4f4;
-            padding: 20px;
-            border-radius: 10px;
-            color: #000000;
+        .search-box {
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
+            border: 2px solid #4CAF50;
+            width: 100%;
+            max-width: 600px;
         }
     </style>
 """, unsafe_allow_html=True)
 
+# Header of the application
 st.markdown('<div class="header">PENCARIAN REGULASI</div>', unsafe_allow_html=True)
 
 # Text input for search query
@@ -88,10 +125,10 @@ if search_query:
     with st.spinner("Searching..."):
         # Get search results from the graph traversal
         results = perform_search(search_query)
-        
+
         # Format the results for display
         formatted_results = format_results_for_display(results)
-        
+
         # Display the results in Streamlit
         if formatted_results:
             st.markdown(f'<div class="results">{formatted_results}</div>', unsafe_allow_html=True)
