@@ -6,7 +6,7 @@ from query import GraphTraversal
 import networkx as nx
 
 # Path to the graph file
-GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
+GRAPH_FILE_PATH = 'dataset/simple_final_graph.graphml'
 
 def perform_search(query):
     # Load the graph
