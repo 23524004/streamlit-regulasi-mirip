@@ -2,7 +2,7 @@ import streamlit as st
 import sys
 import os
 sys.path.append('./src')  # Add src folder to the path
-from query import GraphTraversal
+from src/query import GraphTraversal
 import networkx as nx
 
 # Path to the graph file
