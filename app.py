@@ -22,13 +22,12 @@ def perform_search(query):
 st.markdown("""
     <style>
         .search-box {
-            padding: 20px;
-            font-size: 24px;
-            border-radius: 10px;
+            padding: 10px;
+            font-size: 18px;
+            border-radius: 5px;
             border: 2px solid #4CAF50;
             width: 100%;
             max-width: 600px;
-            height: 120px;
         }
         .header {
             text-align: center;
