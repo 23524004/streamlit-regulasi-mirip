@@ -12,12 +12,15 @@ import networkx as nx
 # Path to the graph file
 GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
 
+# Number of results to display
+TOP_N_RESULTS = 5
+
 def perform_search(query):
     # Load the graph
     graph = nx.read_graphml(GRAPH_FILE_PATH)
     if graph is None or len(graph.nodes) == 0:
         st.error("Graph file could not be loaded or is empty.")
-        return
+        return []
 
     # Define traversal parameters
     similarity_threshold = 0.1
@@ -32,8 +35,11 @@ def perform_search(query):
     # Step 2: Perform the graph traversal starting from the initial nodes
     results = traversal.traverse(initial_nodes)
 
-    # Return results
-    return results
+    # Sort results by similarity score in descending order
+    sorted_results = sorted(results, key=lambda x: x.get('similarity_score', 0), reverse=True)
+
+    # Return top N results
+    return sorted_results[:TOP_N_RESULTS]
 
 def format_results_for_display(results):
     """Format the traversal results for displaying in Streamlit"""
