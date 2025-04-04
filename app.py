@@ -15,10 +15,14 @@ GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
 def perform_search(query):
     # Load the graph
     graph = nx.read_graphml(GRAPH_FILE_PATH)
+    if graph is None or len(graph.nodes) == 0:
+        st.error("Graph file could not be loaded or is empty.")
+        return
+
     
     # Define traversal parameters
-    similarity_threshold = 0.5
-    max_depth = 3
+    similarity_threshold = 0.1
+    max_depth = 2
     
     # Create a GraphTraversal object
     traversal = GraphTraversal(graph, query, similarity_threshold, max_depth)
