@@ -111,7 +111,7 @@ st.markdown("""
             border-radius: 5px;
             border: 2px solid #4CAF50;
             width: 100%;
-            max-width: 600px;
+            height: 60px;
         }
     </style>
 """, unsafe_allow_html=True)
