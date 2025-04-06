@@ -12,15 +12,12 @@ import networkx as nx
 # Path to the graph file
 GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
 
-# Number of results to display
-TOP_N_RESULTS = 5
-
 def perform_search(query):
     # Load the graph
     graph = nx.read_graphml(GRAPH_FILE_PATH)
     if graph is None or len(graph.nodes) == 0:
         st.error("Graph file could not be loaded or is empty.")
-        return []
+        return
 
     # Define traversal parameters
     similarity_threshold = 0.1
@@ -35,11 +32,8 @@ def perform_search(query):
     # Step 2: Perform the graph traversal starting from the initial nodes
     results = traversal.traverse(initial_nodes)
 
-    # Sort results by similarity score in descending order
-    sorted_results = sorted(results, key=lambda x: x.get('similarity_score', 0), reverse=True)
-
-    # Return top N results
-    return sorted_results[:TOP_N_RESULTS]
+    # Return results
+    return results
 
 def format_results_for_display(results):
     """Format the traversal results for displaying in Streamlit"""
@@ -54,14 +48,10 @@ def format_results_for_display(results):
         formatted_result = f"""
         <div class="result">
             <div class="result-header">
-                <strong>From Node:</strong> {from_node} &rarr; <strong>To Node:</strong> {to_node}
-            </div>
-            <div class="result-body">
-                <div class="relation"><strong>Relation:</strong> {relation}</div>
-                <div class="similarity-score"><strong>Similarity Score:</strong> {similarity_score if similarity_score != 'N/A' else 'N/A'}</div>
+                <strong>{to_node}</strong>
             </div>
             <div class="content">
-                <strong>Content (Isi):</strong> {isi}
+                <strong>{isi}</strong> 
             </div>
         </div>
         """
@@ -82,7 +72,7 @@ st.markdown("""
         .result-header {
             font-size: 18px;
             font-weight: bold;
-            color: #333;
+            color: #4CAF50;
             margin-bottom: 8px;
         }
         .result-body {
@@ -101,7 +91,6 @@ st.markdown("""
         .content {
             font-size: 14px;
             color: #333;
-            white-space: pre-wrap;
             word-wrap: break-word;
         }
         .header {
