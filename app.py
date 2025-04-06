@@ -38,6 +38,8 @@ def perform_search(query):
 def format_results_for_display(results):
     """Format the traversal results for displaying in Streamlit"""
     formatted_results = []
+    seen_results = set()
+    
     for result in results:
         from_node = result.get('from_node', 'Unknown')
         to_node = result.get('to_node', 'Unknown')
@@ -55,7 +57,11 @@ def format_results_for_display(results):
             </div>
         </div>
         """
-        formatted_results.append(formatted_result)
+        
+        # Only unique result
+        if formatted_result not in seen_results:
+            formatted_results.append(formatted_result)
+            seen_results.add(formatted_result)
 
     return formatted_results
 
