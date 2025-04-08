@@ -68,6 +68,9 @@ def format_results_for_display(results):
 # Streamlit layout
 st.markdown("""
     <style>
+        body {
+            background-color: black;
+        }
         .result {
             background-color: #f9f9f9;
             padding: 15px;
