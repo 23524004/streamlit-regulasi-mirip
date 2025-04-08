@@ -39,6 +39,14 @@
   <data key="d4">Pasal 1 - Huruf 3</data>
   <data key="d5">Dalam Peraturan Badan Penyelenggara Jaminan Sosial Kesehatan ini, yang dimaksud dengan: Peserta adalah setiap orang, termasuk orang asing yang bekerja paling singkat 6 (enam) bulan di Indonesia, yang telah membayar iuran. www.djpp.kemenkumham.go.id 2014, No.1 3</data>
 </node>
+<node id="NODE GA JELAS">
+  <data key="d0">perbpjsk</data>
+  <data key="d1">1</data>
+  <data key="d2">2014</data>
+  <data key="d3">orisinal</data>
+  <data key="d4">Pasal 1 - Huruf 3</data>
+  <data key="d5">NODE GA JELAS</data>
+</node>
 <node id="BPJS Kesehatan">
   <data key="d0">ENTITAS</data>
   <data key="d3">ORG</data>
