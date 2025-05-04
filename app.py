@@ -15,7 +15,7 @@ from query import GraphTraversal
 import networkx as nx
 
 # Define Google Drive file ID and local file name
-GDRIVE_FILE_ID = '1OCJfBAsNrGDS1egvmO4oyOcbVkiCUd'
+GDRIVE_FILE_ID = '11ieD2HfKONZRGC9Mkhg2iMOm0JJHB1bS'
 GRAPH_FILE_PATH = 'cached_graph.graphml'
 
 def download_graph_if_not_exists():
@@ -25,23 +25,22 @@ def download_graph_if_not_exists():
         gdown.download(url, GRAPH_FILE_PATH, quiet=False)
     else:
         st.info("Using cached graph file.")
-
-# Download the graph file before anything else
-# download_graph_if_not_exists()
+Download the graph file before anything else
+download_graph_if_not_exists()
 
 # Define DROPBOX ---- ORIGINAL FILE GAGAL ,  STREAMLIT NYA GA KUAT
-# Define DROPBOX ---- COMPRESSED DULU
-GRAPH_FILE_URL = "https://www.dropbox.com/scl/fi/izf9byjr9lr4ci9hm5jcr/50_noThresh_entity_zfinal_graph.gz?rlkey=gt1n65a5jj49q187o304tx9ls&st=e8ah17ug&dl=1"
-@st.cache_data(show_spinner="Loading graphx...")
-def load_compressed_graphml_from_url(url):
-    try:
-        with urllib.request.urlopen(url) as response:
-            with gzip.GzipFile(fileobj=response) as gz:
-                with TextIOWrapper(gz, encoding='utf-8') as f:
-                    return nx.read_graphml(f)
-    except Exception as e:
-        st.error(f"Failed to load graph: {e}")
-        return None
+# Define DROPBOX ---- COMPRESSED FILE GAGAL , STREAMLIT NYA GA KUAT
+# GRAPH_FILE_URL = "https://www.dropbox.com/scl/fi/izf9byjr9lr4ci9hm5jcr/50_noThresh_entity_zfinal_graph.gz?rlkey=gt1n65a5jj49q187o304tx9ls&st=e8ah17ug&dl=1"
+# @st.cache_data(show_spinner="Loading graphx...")
+# def load_compressed_graphml_from_url(url):
+#     try:
+#         with urllib.request.urlopen(url) as response:
+#             with gzip.GzipFile(fileobj=response) as gz:
+#                 with TextIOWrapper(gz, encoding='utf-8') as f:
+#                     return nx.read_graphml(f)
+#     except Exception as e:
+#         st.error(f"Failed to load graph: {e}")
+#         return None
 # @st.cache_data(show_spinner="Loading large graph file...")
 # def load_graph_from_dropbox(url):
 #     try:
@@ -55,15 +54,15 @@ def load_compressed_graphml_from_url(url):
 
 
 def perform_search(query):    
-    graph = load_compressed_graphml_from_url(GRAPH_FILE_URL)
-    if graph is None or len(graph.nodes) == 0:
-        st.error("Graph file could not be loaded or is empty.")
-        return []
-    # Load the graph
-    # graph = nx.read_graphml(GRAPH_FILE_PATH)
+    # graph = load_compressed_graphml_from_url(GRAPH_FILE_URL)
     # if graph is None or len(graph.nodes) == 0:
     #     st.error("Graph file could not be loaded or is empty.")
-    #     return
+    #     return []
+    # Load the graph
+    graph = nx.read_graphml(GRAPH_FILE_PATH)
+    if graph is None or len(graph.nodes) == 0:
+        st.error("Graph file could not be loaded or is empty.")
+        return
 
     # Define traversal parameters
     similarity_threshold = 0.1
