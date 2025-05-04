@@ -2,6 +2,8 @@ import streamlit as st
 import sys
 import os
 import gdown
+import urllib.request
+from io import StringIO
 
 # Add the src folder to sys.path
 sys.path.append(os.path.join(os.getcwd(), 'src'))  # Make sure 'src' folder is in sys.path
@@ -23,14 +25,33 @@ def download_graph_if_not_exists():
         st.info("Using cached graph file.")
 
 # Download the graph file before anything else
-download_graph_if_not_exists()
+# download_graph_if_not_exists()
+
+# Define DROPBOX
+GRAPH_FILE_URL = "https://www.dropbox.com/s/abc123xyz/large_graph.graphml?dl=1"
+
+@st.cache_data(show_spinner="Loading large graph file...")
+def load_graph_from_dropbox(url):
+    try:
+        with urllib.request.urlopen(url) as response:
+            data = response.read().decode('utf-8')
+            return nx.read_graphml(StringIO(data))
+    except Exception as e:
+        st.error(f"Failed to load graph: {e}")
+        return None
+
+
 
 def perform_search(query):    
-    # Load the graph
-    graph = nx.read_graphml(GRAPH_FILE_PATH)
+    graph = load_graph_from_dropbox(GRAPH_FILE_URL)
     if graph is None or len(graph.nodes) == 0:
         st.error("Graph file could not be loaded or is empty.")
-        return
+        return []
+    # Load the graph
+    # graph = nx.read_graphml(GRAPH_FILE_PATH)
+    # if graph is None or len(graph.nodes) == 0:
+    #     st.error("Graph file could not be loaded or is empty.")
+    #     return
 
     # Define traversal parameters
     similarity_threshold = 0.1
