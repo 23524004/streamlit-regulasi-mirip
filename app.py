@@ -1,6 +1,7 @@
 import streamlit as st
 import sys
 import os
+import requests
 
 # Add the src folder to sys.path
 sys.path.append(os.path.join(os.getcwd(), 'src'))  # Make sure 'src' folder is in sys.path
@@ -10,9 +11,27 @@ from query import GraphTraversal
 import networkx as nx
 
 # Path to the graph file
-GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
+GRAPH_FILE_PATH = 'dataset/final_graph_50.graphml'
+GOOGLE_DRIVE_FILE_URL = 'https://drive.google.com/file/d/1-1OCJfBAsNrGDS1egvmO4oyOcbVkiCUd'
+
+def download_graph_file():
+    if not os.path.exists(GRAPH_FILE_PATH):
+        # st.info("Downloading large graph file. Please wait...")
+        os.makedirs(os.path.dirname(GRAPH_FILE_PATH), exist_ok=True)
+
+        try:
+            response = requests.get(GOOGLE_DRIVE_FILE_URL)
+            response.raise_for_status()  # Raise error if download fails
+            with open(GRAPH_FILE_PATH, 'wb') as f:
+                f.write(response.content)
+            st.success("Graph file downloaded successfully.")
+        except Exception as e:
+            st.error(f"Error downloading graph file: {e}")
 
 def perform_search(query):
+    # Ensure graph file is downloaded
+    download_graph_file()
+    
     # Load the graph
     graph = nx.read_graphml(GRAPH_FILE_PATH)
     if graph is None or len(graph.nodes) == 0:
