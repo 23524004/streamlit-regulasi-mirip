@@ -28,7 +28,7 @@ def download_graph_if_not_exists():
 # download_graph_if_not_exists()
 
 # Define DROPBOX
-GRAPH_FILE_URL = "https://www.dropbox.com/s/abc123xyz/large_graph.graphml?dl=1"
+GRAPH_FILE_URL = "https://www.dropbox.com/scl/fi/ws1eyn3xgn6pp5icli3p6/50_noThresh_entity_zfinal_graph.graphml?rlkey=3puizeuyue8taicv64z0izc1t&st=pjsismhe&dl=1"
 
 @st.cache_data(show_spinner="Loading large graph file...")
 def load_graph_from_dropbox(url):
