@@ -4,6 +4,8 @@ import os
 import gdown
 import urllib.request
 from io import StringIO
+import gzip
+from io import TextIOWrapper
 
 # Add the src folder to sys.path
 sys.path.append(os.path.join(os.getcwd(), 'src'))  # Make sure 'src' folder is in sys.path
@@ -27,23 +29,33 @@ def download_graph_if_not_exists():
 # Download the graph file before anything else
 # download_graph_if_not_exists()
 
-# Define DROPBOX
-GRAPH_FILE_URL = "https://www.dropbox.com/scl/fi/ws1eyn3xgn6pp5icli3p6/50_noThresh_entity_zfinal_graph.graphml?rlkey=3puizeuyue8taicv64z0izc1t&st=pjsismhe&dl=1"
-
-@st.cache_data(show_spinner="Loading large graph file...")
-def load_graph_from_dropbox(url):
+# Define DROPBOX ---- ORIGINAL FILE GAGAL ,  STREAMLIT NYA GA KUAT
+# Define DROPBOX ---- COMPRESSED DULU
+GRAPH_FILE_URL = "https://www.dropbox.com/scl/fi/izf9byjr9lr4ci9hm5jcr/50_noThresh_entity_zfinal_graph.gz?rlkey=gt1n65a5jj49q187o304tx9ls&st=e8ah17ug&dl=1"
+@st.cache_data(show_spinner="Loading graphx...")
+def load_compressed_graphml_from_url(url):
     try:
         with urllib.request.urlopen(url) as response:
-            data = response.read().decode('utf-8')
-            return nx.read_graphml(StringIO(data))
+            with gzip.GzipFile(fileobj=response) as gz:
+                with TextIOWrapper(gz, encoding='utf-8') as f:
+                    return nx.read_graphml(f)
     except Exception as e:
         st.error(f"Failed to load graph: {e}")
         return None
+# @st.cache_data(show_spinner="Loading large graph file...")
+# def load_graph_from_dropbox(url):
+#     try:
+#         with urllib.request.urlopen(url) as response:
+#             data = response.read().decode('utf-8')
+#             return nx.read_graphml(StringIO(data))
+#     except Exception as e:
+#         st.error(f"Failed to load graph: {e}")
+#         return None
 
 
 
 def perform_search(query):    
-    graph = load_graph_from_dropbox(GRAPH_FILE_URL)
+    graph = load_compressed_graphml_from_url(GRAPH_FILE_URL)
     if graph is None or len(graph.nodes) == 0:
         st.error("Graph file could not be loaded or is empty.")
         return []
