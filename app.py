@@ -1,7 +1,7 @@
 import streamlit as st
 import sys
 import os
-import requests
+import gdown
 
 # Add the src folder to sys.path
 sys.path.append(os.path.join(os.getcwd(), 'src'))  # Make sure 'src' folder is in sys.path
@@ -10,28 +10,22 @@ sys.path.append(os.path.join(os.getcwd(), 'src'))  # Make sure 'src' folder is i
 from query import GraphTraversal
 import networkx as nx
 
-# Path to the graph file
-GRAPH_FILE_PATH = 'dataset/final_graph_50.graphml'
-GOOGLE_DRIVE_FILE_URL = 'https://drive.google.com/file/d/1-1OCJfBAsNrGDS1egvmO4oyOcbVkiCUd'
+# Define Google Drive file ID and local file name
+GDRIVE_FILE_ID = '1OCJfBAsNrGDS1egvmO4oyOcbVkiCUd'
+GRAPH_FILE_PATH = 'cached_graph.graphml'
 
-def download_graph_file():
+def download_graph_if_not_exists():
     if not os.path.exists(GRAPH_FILE_PATH):
-        # st.info("Downloading large graph file. Please wait...")
-        os.makedirs(os.path.dirname(GRAPH_FILE_PATH), exist_ok=True)
+        url = f"https://drive.google.com/uc?id={GDRIVE_FILE_ID}"
+        st.info("Downloading large graph file from Google Drive. This may take a moment...")
+        gdown.download(url, GRAPH_FILE_PATH, quiet=False)
+    else:
+        st.info("Using cached graph file.")
 
-        try:
-            response = requests.get(GOOGLE_DRIVE_FILE_URL)
-            response.raise_for_status()  # Raise error if download fails
-            with open(GRAPH_FILE_PATH, 'wb') as f:
-                f.write(response.content)
-            st.success("Graph file downloaded successfully.")
-        except Exception as e:
-            st.error(f"Error downloading graph file: {e}")
+# Download the graph file before anything else
+download_graph_if_not_exists()
 
-def perform_search(query):
-    # Ensure graph file is downloaded
-    download_graph_file()
-    
+def perform_search(query):    
     # Load the graph
     graph = nx.read_graphml(GRAPH_FILE_PATH)
     if graph is None or len(graph.nodes) == 0:
