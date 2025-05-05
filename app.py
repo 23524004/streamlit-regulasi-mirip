@@ -12,19 +12,13 @@ import networkx as nx
 # Path to the graph file
 GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
 
-# Cache the loading of the graph to avoid reloading it on every query
-@st.cache_data
-def load_graph():
-    """Cache the graph loading so that it's not loaded every time a search is performed."""
+def perform_search(query):
+    # Load the graph
     graph = nx.read_graphml(GRAPH_FILE_PATH)
     if graph is None or len(graph.nodes) == 0:
         st.error("Graph file could not be loaded or is empty.")
-        return None
-    return graph
+        return
 
-# Cache the search operation for a specific query
-@st.cache_data
-def perform_search(query, graph):
     # Define traversal parameters
     similarity_threshold = 0.1
     max_depth = 2
@@ -131,14 +125,11 @@ st.markdown('<div class="header">PENCARIAN REGULASI</div>', unsafe_allow_html=Tr
 # Text input for search query
 search_query = st.text_input("", "", key="search", placeholder="Type your query and press Enter (iuran, peserta, bpjs kesehatan)", help="Start typing to search...", max_chars=25)
 
-# Load the graph (caching it)
-graph = load_graph()
-
 # If the user has entered a query, perform the search
-if search_query and graph:
+if search_query:
     with st.spinner("Searching..."):
-        # Get search results from the graph traversal (cached)
-        results = perform_search(search_query, graph)
+        # Get search results from the graph traversal
+        results = perform_search(search_query)
 
         # Format the results for display
         formatted_results = format_results_for_display(results)
