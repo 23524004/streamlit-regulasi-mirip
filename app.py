@@ -1,8 +1,6 @@
 import streamlit as st
 import sys
 import os
-import gzip
-from io import TextIOWrapper
 
 # Add the src folder to sys.path
 sys.path.append(os.path.join(os.getcwd(), 'src'))  # Make sure 'src' folder is in sys.path
@@ -12,25 +10,21 @@ from query import GraphTraversal
 import networkx as nx
 
 # Path to the graph file
-# GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
-GRAPH_FILE_PATH = 'dataset/50_noThresh_entity_zfinal_graph.gz'
+GRAPH_FILE_PATH = 'dataset/final_graph_50entity.graphml'
 
-@st.cache_data(show_spinner="Loading graphzzz...")
-def load_compressed_graphml(filepath):
-    try:
-        with gzip.open(filepath, 'rt', encoding='utf-8') as f:
-            return nx.read_graphml(f)
-    except Exception as e:
-        st.error(f"Failed to load graph: {e}")
-        return None
-
-def perform_search(query):
-    # Load the graph
-    graph = load_compressed_graphml(GRAPH_FILE_PATH)
+# Cache the loading of the graph to avoid reloading it on every query
+@st.cache_data
+def load_graph():
+    """Cache the graph loading so that it's not loaded every time a search is performed."""
+    graph = nx.read_graphml(GRAPH_FILE_PATH)
     if graph is None or len(graph.nodes) == 0:
         st.error("Graph file could not be loaded or is empty.")
-        return []
+        return None
+    return graph
 
+# Cache the search operation for a specific query
+@st.cache_data
+def perform_search(query, graph):
     # Define traversal parameters
     similarity_threshold = 0.1
     max_depth = 2
@@ -135,13 +129,16 @@ st.markdown("""
 st.markdown('<div class="header">PENCARIAN REGULASI</div>', unsafe_allow_html=True)
 
 # Text input for search query
-search_query = st.text_input("", "", key="search", placeholder="Type your query and press Enter", help="Start typing to search...", max_chars=25)
+search_query = st.text_input("", "", key="search", placeholder="Type your query and press Enter (iuran, peserta, bpjs kesehatan)", help="Start typing to search...", max_chars=25)
+
+# Load the graph (caching it)
+graph = load_graph()
 
 # If the user has entered a query, perform the search
-if search_query:
+if search_query and graph:
     with st.spinner("Searching..."):
-        # Get search results from the graph traversal
-        results = perform_search(search_query)
+        # Get search results from the graph traversal (cached)
+        results = perform_search(search_query, graph)
 
         # Format the results for display
         formatted_results = format_results_for_display(results)
