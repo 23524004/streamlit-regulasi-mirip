@@ -1,6 +1,8 @@
 import streamlit as st
 import sys
 import os
+import gzip
+from io import TextIOWrapper
 
 # Add the src folder to sys.path
 sys.path.append(os.path.join(os.getcwd(), 'src'))  # Make sure 'src' folder is in sys.path
@@ -10,14 +12,24 @@ from query import GraphTraversal
 import networkx as nx
 
 # Path to the graph file
-GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
+# GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
+GRAPH_FILE_PATH = 'dataset/50_noThresh_entity_zfinal_graph.gz'
+
+@st.cache_data(show_spinner="Loading graphzzz...")
+def load_compressed_graphml(filepath):
+    try:
+        with gzip.open(filepath, 'rt', encoding='utf-8') as f:
+            return nx.read_graphml(f)
+    except Exception as e:
+        st.error(f"Failed to load graph: {e}")
+        return None
 
 def perform_search(query):
     # Load the graph
-    graph = nx.read_graphml(GRAPH_FILE_PATH)
+    graph = load_compressed_graphml(GRAPH_FILE_PATH)
     if graph is None or len(graph.nodes) == 0:
         st.error("Graph file could not be loaded or is empty.")
-        return
+        return []
 
     # Define traversal parameters
     similarity_threshold = 0.1
