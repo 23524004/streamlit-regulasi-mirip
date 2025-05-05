@@ -10,7 +10,7 @@ from query import GraphTraversal
 import networkx as nx
 
 # Path to the graph file
-GRAPH_FILE_PATH = 'dataset/final_graph_50entity.graphml'
+GRAPH_FILE_PATH = 'dataset/final_graph.graphml'
 
 # Cache the loading of the graph to avoid reloading it on every query
 @st.cache_data
